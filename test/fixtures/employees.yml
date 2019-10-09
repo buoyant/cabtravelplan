@@ -1,0 +1,17 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  empid: MyString
+  empname: MyString
+  address: MyString
+  lat: MyString
+  lon: MyString
+  distance: 1.5
+
+two:
+  empid: MyString
+  empname: MyString
+  address: MyString
+  lat: MyString
+  lon: MyString
+  distance: 1.5
