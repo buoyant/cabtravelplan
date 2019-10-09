@@ -31,7 +31,6 @@ class Employee < ApplicationRecord
     count = 0
     distance_of_each_employee_from_others.sort_by {|k,v| v.size}.reverse.each do |group|
       result[count] = sort_group_by_distance(group[1], result.values.flatten.map(&:id)).reverse
-      # result[count] = sort_group_by_distance(group[1], []).reverse
       count += 1
     end
     result
@@ -41,6 +40,7 @@ class Employee < ApplicationRecord
 
   # values are employee ids, distance traveled 
   @@vehicle_trips = {car: [], mpv: [], traveller: [], bus: []}
+  AVAILABLE_VEHICLES = {car: [12,10], mpv: [5,15], traveller: [4,20], bus: [2,35]}
 
   def self.split_by_40(batch_value)
     if batch_value.size > 40
@@ -100,5 +100,49 @@ class Employee < ApplicationRecord
     end
     final_outcome.last
   end
+
+  def self.assign_vehicle
+    assign_vehicle = {}
+
+    travel_plan.each do |vehicle_type, emp_data|
+      emp_data = emp_data.sort_by {|k,v| v}.reverse
+      
+      emp_data.each_with_index do |v, index|
+
+        if index >= AVAILABLE_VEHICLES[vehicle_type][0]
+          i = index % AVAILABLE_VEHICLES[vehicle_type][0]
+          assign_vehicle["#{vehicle_type}_#{AVAILABLE_VEHICLES[vehicle_type][0]-i}"] << v
+        else
+          assign_vehicle["#{vehicle_type}_#{index+1}"] = [v]
+        end
+
+      end # emp_data
+
+    end
+    assign_vehicle
+  end
+
+  def self.cost_sheet
+    cost_sheet = {}
+    assign_vehicle.each do |k,v|
+    vehicle_type = k.split('_')[0].to_sym
+      v.each do |j|
+        if cost_sheet[k]
+          cost_sheet[k] += j[1] * AVAILABLE_VEHICLES[vehicle_type][1]
+        else
+          cost_sheet[k] = j[1] * AVAILABLE_VEHICLES[vehicle_type][1]
+        end
+
+        if cost_sheet["#{k}_trips"]
+          cost_sheet["#{k}_trips"] += 1
+        else
+          cost_sheet["#{k}_trips"] = 1
+        end
+
+      end
+    end
+    cost_sheet
+  end
+
 
 end

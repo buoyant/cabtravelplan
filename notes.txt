@@ -1,0 +1,30 @@
+Plan of Action:
+
+  1. how to pick location from latitude and longitude
+  2. how to connect lat and lon to create a route path
+  3. starting point will be office - lat & lon
+  4. output will be two sheets
+      a. employee plan - empl details
+      b. cost plan - vehicle details
+  5.create algo to make path
+
+  * The haversine formula determines the great-circle distance between two points on a sphere given their longitudes and latitudes. Important in navigation, it   is a special case of a more general formula in spherical trigonometry, the law of haversines, that relates the sides and angles of spherical triangles.
+  * create a ruby program that will accept csv and generate two csv
+  * As per data given, we already have lat and long details of employees. we dont need any third party api for getting lat and long from address.
+if needed we can use geokit library to retrieve lat and lon from address
+
+Approach / Solution steps:
+    1. calculate distance of each employee from others.
+    2. we calculated with a range of 3 kms radius.
+    3. we grouped all nearest employees after excluding the ones which are already been grouped.
+    4. we sorted each group employee on basis of distance from office.
+    5. we segregated these groups into vehicle trips by type of vehicle (according to capacity allowed) and the distance to be traveled.
+    6. Assigning trips to vehicles as per availability.
+    7. calculate the cost from no.of trips of each vehicle and distance traveled (which is calculated in point 5).
+    8. vehicle assignation has done in zig zag format (sooner finished the trip -> assigned a new trip).
+  
+Points taken care:
+  travel plan gets refreshed everytime to avoid employees who are on leave.
+  travel plan gets refreshed when any new employee joined.
+  application can prepare travel from csv as well as database.
+  Lat and Lon can also be extracted within the app from address provided.
